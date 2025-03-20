@@ -5,9 +5,9 @@
 // [e.g., "waterbottle" is a rotation of 'erbottlewat")
 
 function isSubstring(s1: string, s2: string): boolean {
-    return s1.includes(s2);
+  return s1.includes(s2)
 }
 
 export default function stringRotation(s1: string, s2: string): boolean {
-
+  return isSubstring(`${s1}${s1}`, s2)
 }
