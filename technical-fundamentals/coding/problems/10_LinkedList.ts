@@ -8,11 +8,13 @@ export type Node<T> = {
 }
 
 export class LinkedList<T> {
-  #head: Node<T> | undefined
-  #tail: Node<T> | undefined
-  #length: number
+  #head: Node<T> | undefined = undefined
+  #tail: Node<T> | undefined = undefined
+  #length: number = 0
 
   constructor(head?: Node<T>) {
+    if (!head) return
+
     let curr = (this.#head = head)
     let count = 1
 
@@ -27,7 +29,21 @@ export class LinkedList<T> {
 
   // Methods
 
-  push(value: T) {}
+  push(value: T) {
+    const newNode = { value }
+
+    if (!this.#tail) {
+      this.#head = this.#tail = newNode
+    } else {
+      this.#tail.next = newNode
+      this.#tail = this.#tail.next
+    }
+
+    this.#length++
+
+    return this
+  }
+
   filter() {}
   visit() {}
   remove() {}
@@ -67,7 +83,17 @@ export class LinkedList<T> {
     return curr
   }
 
-  //find(): Node<T> {}
+  /**
+   * Finds the next node that matches the search value.
+   */
+  find(value: T, from?: Node<T>): Node<T> | undefined {
+    let current = from ? from : this.head
+
+    while (current && current.value !== value) current = current.next
+
+    return current
+  }
+
   //iterator(): LinkedListIterator {}
 }
 

@@ -12,14 +12,39 @@
 // Output: 3 -> 1 -> 2 -> 10 -> 5 -> 5 -> 8
 // ```
 
-import { LinkedList } from "./10_LinkedList";
+// Note from the solver, in the tests, the actual expected output is:
+// 3 -> 2 -> 1 -> 5 -> 8 -> 5 -> 10
+// Not the one listed above.
 
-export type Node<T> = {
-  value: T;
-  next?: Node<T>;
-};
+import { LinkedList, type Node } from './10_LinkedList'
 
 export default function partition<T>(
   head: Node<T> | undefined,
-  x: T,
-): Node<T> | undefined {}
+  x: T
+): Node<T> | undefined {
+  if (!head) return head
+
+  const lower = new LinkedList<T>()
+  const rest = new LinkedList<T>()
+
+  let curr: Node<T> | undefined = head
+
+  while (curr) {
+    if (curr.value < x) {
+      lower.push(curr.value)
+    } else {
+      rest.push(curr.value)
+    }
+    curr = curr.next
+  }
+
+  // We append the result lists
+  let concat = rest.head
+
+  while (concat) {
+    lower.push(concat.value)
+    concat = concat.next
+  }
+
+  return lower.head
+}
