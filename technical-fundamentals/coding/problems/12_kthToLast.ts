@@ -2,14 +2,15 @@
 
 // Implement an algorithm to find the kth to last element of a singly linked list.
 
-import { LinkedList } from "./10_LinkedList";
-
-export type Node<T> = {
-  value: T;
-  next?: Node<T>;
-};
+import { LinkedList, type Node } from './10_LinkedList'
 
 export default function kthToLast<T>(
   head: Node<T>,
-  k: number,
-): Node<T> | undefined {}
+  k: number
+): Node<T> | undefined {
+  const ll = new LinkedList(head)
+  const index = ll.length - k
+  const node = ll.get(index)
+
+  return node
+}
