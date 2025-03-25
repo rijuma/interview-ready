@@ -10,14 +10,23 @@
 // Result: nothing is returned, but the new linked list looks like a->b->d->e->f Hints: #72
 // ```
 
-import { LinkedList } from "./10_LinkedList";
+// Note from solver: The tests do actually expect the function to return the head node.
 
-export type Node<T> = {
-  value: T;
-  next?: Node<T>;
-};
+import { LinkedList, type Node } from './10_LinkedList'
 
 export default function deleteMiddleNode<T>(
   head: Node<T>,
-  position: number,
-): Node<T> | undefined {}
+  position: number
+): Node<T> | undefined {
+  const ll = new LinkedList(head)
+
+  if (ll.length < 3) return head
+
+  if (position < 1 || position > ll.length - 2) return head
+
+  const prev = ll.get(position - 1)
+
+  prev!.next = prev?.next?.next
+
+  return head
+}
