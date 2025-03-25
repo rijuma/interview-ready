@@ -1,4 +1,5 @@
-import removeDups, { Node } from '../../11_removeDups'
+import removeDups from '../../11_removeDups'
+import type { Node } from '../../10_LinkedList'
 
 describe('11 - removeDups', () => {
   test('remove duplicates on linked list', () => {
