@@ -9,14 +9,33 @@
 // Output: 2 -> 1 -> 9. That is, 912.
 // ```
 
-import { LinkedList } from "./10_LinkedList";
-
-export type Node<T> = {
-  value: T;
-  next?: Node<T>;
-};
+import { LinkedList, type Node } from './10_LinkedList'
 
 export default function sumLists(
   list1: Node<number> | undefined,
-  list2: Node<number> | undefined,
-): Node<number> | undefined {}
+  list2: Node<number> | undefined
+): Node<number> | undefined {
+  const result = new LinkedList<number>()
+
+  let num1 = list1
+  let num2 = list2
+  let carryOver = 0
+  while (num1 || num2 || carryOver > 0) {
+    const digit1 = num1?.value || 0
+    const digit2 = num2?.value || 0
+    const sum = digit1 + digit2 + carryOver
+
+    if (sum < 10) {
+      result.push(sum)
+      carryOver = 0
+    } else {
+      result.push(sum % 10)
+      carryOver = (sum / 10) | 0 // Truncate
+    }
+
+    num1 = num1?.next
+    num2 = num2?.next
+  }
+
+  return result.head
+}
