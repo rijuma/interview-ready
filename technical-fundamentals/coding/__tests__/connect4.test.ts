@@ -7,22 +7,33 @@ import { Connect4, PLAYER_ONE, PLAYER_TWO } from '../connect4'
 describe('Connect4', () => {
   it('It should allow you play within bounds', async () => {
     const c4 = new Connect4({ width: 10, height: 10 })
+    expect(c4.winner()).toBeFalsy()
+
     expect(c4.getValue(10, 1)).toBeFalsy()
+    expect(c4.getValue(9, 1)).toBeFalsy()
+    expect(c4.getValue(8, 1)).toBeFalsy()
+
     c4.play(1)
     c4.play(1)
+
+    expect(c4.winner()).toBeFalsy()
     expect(c4.getValue(10, 1)).toEqual(PLAYER_ONE)
     expect(c4.getValue(9, 1)).toEqual(PLAYER_TWO)
+    expect(c4.getValue(8, 1)).toBeFalsy()
   })
 
   it('It should do nothing if you play out of bounds', async () => {
     const c4 = new Connect4({ width: 10, height: 10 })
+    expect(c4.winner()).toBeFalsy()
     c4.play(100)
     expect(c4.getValue(100, 1)).toBeFalsy()
+    expect(c4.winner()).toBeFalsy()
   })
 
   it('it should detect horizontal winning', () => {
     const c4 = new Connect4({ width: 10, height: 10 })
     for (let i = 1; i <= 4; i++) {
+      expect(c4.winner()).toBeFalsy()
       c4.play(i)
       c4.play(i)
     }
@@ -32,6 +43,7 @@ describe('Connect4', () => {
   it('it should detect vertical winning', () => {
     const c4 = new Connect4({ width: 10, height: 10 })
     for (let i = 0; i < 4; i++) {
+      expect(c4.winner()).toBeFalsy()
       c4.play(1)
       c4.play(2)
     }
@@ -41,14 +53,20 @@ describe('Connect4', () => {
   it('it should detect diagonal winning', () => {
     const c4 = new Connect4({ width: 10, height: 10 })
     const plays = [1, 2, 2, 3, 4, 3, 3, 4, 5, 4, 4]
-    plays.forEach((p) => c4.play(p))
+    plays.forEach((p) => {
+      expect(c4.winner()).toBeFalsy()
+      c4.play(p)
+    })
     expect(c4.winner()).toEqual(PLAYER_ONE)
   })
 
   it('it should detect diagonal winning', () => {
     const c4 = new Connect4({ width: 10, height: 10 })
     const plays = [1, 2, 2, 3, 4, 3, 3, 4, 5, 4, 4].reverse()
-    plays.forEach((p) => c4.play(p))
+    plays.forEach((p) => {
+      expect(c4.winner()).toBeFalsy()
+      c4.play(p)
+    })
     expect(c4.winner()).toEqual(PLAYER_ONE)
   })
 })
