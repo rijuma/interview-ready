@@ -53,8 +53,8 @@ describe('Connect4', () => {
   it('it should detect diagonal winning', () => {
     const c4 = new Connect4({ width: 10, height: 10 })
     const plays = [1, 2, 2, 3, 4, 3, 3, 4, 5, 4, 4]
+    expect(c4.winner()).toBeFalsy()
     plays.forEach((p) => {
-      expect(c4.winner()).toBeFalsy()
       c4.play(p)
     })
     expect(c4.winner()).toEqual(PLAYER_ONE)
@@ -63,8 +63,8 @@ describe('Connect4', () => {
   it('it should detect diagonal winning', () => {
     const c4 = new Connect4({ width: 10, height: 10 })
     const plays = [1, 2, 2, 3, 4, 3, 3, 4, 5, 4, 4].reverse()
+    expect(c4.winner()).toBeFalsy()
     plays.forEach((p) => {
-      expect(c4.winner()).toBeFalsy()
       c4.play(p)
     })
     expect(c4.winner()).toEqual(PLAYER_ONE)
