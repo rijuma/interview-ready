@@ -1,7 +1,7 @@
 /**
 Connect4
 
-Connect4 is a game where two players take turns placing a token on columns that drop to the bottom.
+Connect4 is a game where two players take turns placing a piece on columns that drop to the bottom.
 When a player forms 4 of his tokens in a line - horizontally, vertically,or diagonally - the player wins.
 
 [Visualization](https://i.ebayimg.com/images/g/DzMAAOSwSjxj6m0e/s-l1600.jpg)
@@ -12,6 +12,18 @@ Implement Connect 4 with the class below.
 export const PLAYER_ONE = 1
 export const PLAYER_TWO = 2
 
+const direction = {
+  top: { dx: 0, dy: -1 },
+  topRight: { dx: 1, dy: -1 },
+  right: { dx: 1, dy: 0 },
+  bottomRight: { dx: 1, dy: 1 },
+  bottom: { dx: 0, dy: 1 },
+  bottomLeft: { dx: -1, dy: 1 },
+  left: { dx: -1, dy: 0 },
+  topLeft: { dx: -1, dy: -1 },
+} as const
+type Direction = (typeof direction)[keyof typeof direction]
+
 type Board = number[][] // [col][row]
 type Player = number
 
@@ -19,19 +31,19 @@ export class Connect4 {
   #currentPlayer: number
   #rows = 0
   #cols = 0
-  #tokenCount: number
+  #piecesToWin: number
   #board: Board
 
   constructor({
     width = 7,
     height = 6,
     startingPlayer = PLAYER_ONE,
-    tokenCount = 4,
+    piecesToWin = 4,
   } = {}) {
     this.#rows = height
     this.#cols = width
     this.#currentPlayer = startingPlayer
-    this.#tokenCount = tokenCount
+    this.#piecesToWin = piecesToWin
     this.#board = Array(this.#cols)
       .fill([])
       .map(() => Array(this.#rows).fill(0))
@@ -57,13 +69,43 @@ export class Connect4 {
   }
 
   #checkPiece(colIdx: number, rowIdx: number): Player | null {
-    const token = this.#board[colIdx][rowIdx]
+    let winner: Player | null = null
 
-    if (!token) return 0
+    const piece = this.#board[colIdx][rowIdx]
 
-    // Here we check the piece connections and tell if there's a winner or just continue checking.
+    if (!piece) return winner
 
-    return null
+    const walk = (
+      colIdx: number,
+      rowIdx: number,
+      dir: Direction,
+      prev: Player,
+      count: number = 1
+    ): Player | null => {
+      // Next coordinate based on deltas.
+      const col = colIdx + dir.dx
+      const row = rowIdx + dir.dy
+
+      const piece = this.#board[col]?.[row]
+      if (!piece || piece !== prev) return null
+
+      const newCount = count + 1
+
+      if (newCount === this.#piecesToWin) return piece
+
+      return walk(col, row, dir, piece, newCount)
+    }
+
+    // Lets check every direction for the current piece.
+    Object.values(direction).some((dir) => {
+      const result = walk(colIdx, rowIdx, dir, piece, 1)
+
+      if (result) winner = result
+
+      return result
+    })
+
+    return winner
   }
 
   winner(): Player | null {
