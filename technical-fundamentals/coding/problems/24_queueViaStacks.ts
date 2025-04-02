@@ -3,18 +3,40 @@
 // Implement a MyQueue class which implements a queue using two stacks.
 
 export default class MyQueue<T> {
-    constructor() {
-    }
+  private heads: T[]
+  private tails: T[]
 
-    enqueue(value: T): void {
-    }
+  constructor() {
+    this.heads = []
+    this.tails = []
+  }
 
-    dequeue(): T | undefined {
-    }
+  enqueue(value: T): void {
+    this.toHeads()
+    this.heads.push(value)
+  }
 
-    peek(): T | undefined {
-    }
+  dequeue(): T | undefined {
+    this.toTails()
+    return this.tails.pop()
+  }
 
-    isEmpty(): boolean {
-    }
+  peek(): T | undefined {
+    this.toTails()
+    return this.tails.at(-1)
+  }
+
+  isEmpty(): boolean {
+    return this.heads.length + this.tails.length === 0
+  }
+
+  // --
+
+  private toHeads() {
+    while (this.tails.length) this.heads.push(this.tails.pop()!)
+  }
+
+  private toTails() {
+    while (this.heads.length) this.tails.push(this.heads.pop()!)
+  }
 }
