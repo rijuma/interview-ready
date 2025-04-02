@@ -15,13 +15,22 @@
 // Hints: #50, #69, #83, #90
 // ```
 
-import { LinkedList } from "./10_LinkedList";
-
-export type Node<T> = {
-  value: T;
-  next?: Node<T>;
-};
+import type { Node } from './10_LinkedList'
 
 export default function detectLoop<T>(
-  head: Node<T> | undefined,
-): Node<T> | null {}
+  head: Node<T> | undefined
+): Node<T> | null {
+  const walked = new Set()
+
+  const walk = (node?: Node<T>) => {
+    if (!node) return null
+
+    if (walked.has(node)) return node
+
+    walked.add(node)
+
+    return walk(node.next)
+  }
+
+  return walk(head)
+}
