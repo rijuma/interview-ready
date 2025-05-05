@@ -1,0 +1,25 @@
+.tetris {
+  --size: 1.5rem;
+
+  display: inline-flex;
+  flex-direction: column;
+  border: 2px solid black;
+
+  .row {
+    display: flex;
+    height: var(--size);
+  }
+
+  .cell {
+    width: var(--size);
+    border: 1px solid #333;
+  }
+
+  .cell-1 {
+    background: #333;
+  }
+
+  .cell-2 {
+    background: blue;
+  }
+}
